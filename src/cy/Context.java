@@ -11,6 +11,9 @@ public class Context {
 	public Context(String outFile) throws IOException {
 		pw = new PrintWriter(outFile);
 		pw.println("<html>");
+		pw.println("<head>");
+		pw.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+		pw.println("</head>");
 		pw.println("<body>");
 	}
 	
