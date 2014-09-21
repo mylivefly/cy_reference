@@ -40,8 +40,8 @@ public class RangWorker extends Thread {
 					ctx.println(", rank: " + rank);
 					ctx.println(", cost: " + cost);
 					ctx.println("<br/>" + comment + "<br/>");
-					System.out.println(num + ": " + rank);
 				}
+				System.out.println(Thread.currentThread().getId() + ", " + num + ": " + rank);
 			} catch (Exception e) {
 				System.out.println("error: " + num);
 				e.printStackTrace();

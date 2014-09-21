@@ -19,7 +19,7 @@ public class RangManager {
 	static void execute(String inFile, String outFile) throws IOException {
 		BufferedReader br = null;
 		Context ctx = new Context(outFile);
-		int threadCount = 20;
+		int threadCount = 10;
 		ArrayList[] numLists = new ArrayList[threadCount];
 		for (int i=0; i<threadCount; i++) {
 			numLists[i] = new ArrayList<String>();

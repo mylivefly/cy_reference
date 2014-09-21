@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 
 public class Context {
 
+	private long startTime = System.currentTimeMillis();
 	private int threadCount =  0;
 	private PrintWriter pw = null;
 	
@@ -26,7 +27,10 @@ public class Context {
 		if (threadCount == 0) {
 			pw.println("</body>");
 			pw.println("</html>");
+			pw.flush();
 			pw.close();
+			long end = System.currentTimeMillis();
+			System.out.println("duration: " + (end-startTime)/1000 + "s");
 		}
 	}
 	
