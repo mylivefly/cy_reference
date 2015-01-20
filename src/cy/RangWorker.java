@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -26,6 +30,7 @@ public class RangWorker extends Thread {
 		ctx.signIn();
 		String url;
 		String rank, comment, cost;
+		Date today = new Date(System.currentTimeMillis());
 		for (String num : numbers) {
 			url = "http://www.bestopview.com/fengxi/" + num + ".html";
 			try {
@@ -40,6 +45,8 @@ public class RangWorker extends Thread {
 					ctx.println(", rank: " + rank);
 					ctx.println(", cost: " + cost);
 					ctx.println("<br/>" + comment + "<br/>");
+					cost = cost.substring(0, cost.length()-2);
+					save(num, today, Float.parseFloat(cost), Integer.parseInt(rank), comment);
 				}
 				System.out.println(Thread.currentThread().getId() + ", " + num + ": " + rank);
 			} catch (Exception e) {
@@ -75,6 +82,25 @@ public class RangWorker extends Thread {
 			if (conn != null) conn.disconnect();
 		}
 		return sb.toString();
+	}
+	
+	void save(String number, Date date, float rate, int score, String comment) throws SQLException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = ctx.getConnection();
+			ps = conn.prepareStatement("insert into stock_comment(stock_no,trade_date,cost_rate,score,comment) "
+					+ " values(?,?,?,?,?) ");
+			ps.setString(1, number);
+			ps.setDate(2, date);
+			ps.setFloat(3, rate);
+			ps.setInt(4, score);
+			ps.setString(5, comment);
+			ps.executeUpdate();
+		} finally {
+			ps.close();
+			ctx.releaseConnection(conn);
+		}
 	}
 	
 }
